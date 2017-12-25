@@ -224,7 +224,7 @@ int main(int argc, char* argv[])
 //////////////////////////////////////////////////////////
 	char *data = to_server;
 	int size = to_server_size;
-	int part_size = 200000;
+	int part_size = 250000;
 	while (size)
 	{
 		int c = size < part_size? size : part_size;
