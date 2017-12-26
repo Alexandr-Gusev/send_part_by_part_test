@@ -1,0 +1,54 @@
+<html>
+<head>
+	<meta http-equiv="content-type" content="text/html; charset=utf-8">
+</head>
+<body>
+</body>
+<script>
+	var line = [
+		{name: "Арбатско-Покровская", no: "3"},
+		{name: "Бутовская", no: "12"},
+		{name: "Замоскворецкая", no: "2"},
+		{name: "Калининская", no: "8"},
+		{name: "Калужско-Рижская", no: "6"},
+		{name: "Каховская", no: "11"},
+		{name: "Кольцевая", no: "5"},
+		{name: "Люблинско-Дмитровская", no: "10"},
+		{name: "Монорельс", no: "13"},
+		{name: "Серпуховско-Тимирязевская", no: "9"},
+		{name: "Сокольническая", no: "1"},
+		{name: "Солнцевская", no: "8А"},
+		{name: "Таганско-Краснопресненская", no: "7"},
+		{name: "Филёвская", no: "4"}
+	];
+	var line_color = [
+		{no: "3", color: "2C75C4"},
+		{no: "12", color: "B0BFE7", txt_color: "000000"},
+		{no: "2", color: "4DBE52"},
+		{no: "8", color: "FBC81E", txt_color: "000000"},
+		{no: "6", color: "F07025"},
+		{no: "11", color: "80D4C9", txt_color: "000000"},
+		{no: "5", color: "85412E"},
+		{no: "10", color: "A8D92D", txt_color: "000000"},
+		{no: "13", color: "2C75C4"},
+		{no: "9", color: "9F9F9F"},
+		{no: "1", color: "D92B2C"},
+		{no: "8А", color: "FBC81E", txt_color: "000000"},
+		{no: "7", color: "89339E"},
+		{no: "4", color: "4DC6F4", txt_color: "000000"}
+	];
+	for (var i = 0; i < line.length; i++) {
+		var div = document.createElement("div");
+		div.innerHTML = line[i].name + " (" + line[i].no + ")";
+		for (var j = 0; j < line_color.length; j++) {
+			if (line_color[j].no == line[i].no) {
+				div.style["color"] = "#" + (line_color[j].txt_color ? line_color[j].txt_color : "FFFFFF");
+				div.style["background-color"] = "#" + line_color[j].color;
+				div.style["padding"] = "20px";
+				break;
+			}
+		}
+		document.body.appendChild(div);
+	}
+</script>
+</html>
