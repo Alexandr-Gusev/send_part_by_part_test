@@ -96,7 +96,7 @@ bool receive_file(const char *file_name, SOCKET s)
 				printf("recv error\n");
 				return false;
 			}
-|		}
+		}
 		if (!n)
 		{
 			printf("disconnected\n");
