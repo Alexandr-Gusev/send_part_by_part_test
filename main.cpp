@@ -8,8 +8,8 @@
 //------------------------------------------------------------------------------
 //#define IS_SERVER
 
-#define IP "172.20.44.149"
-#define PORT 80
+#define IP "172.20.44.45"
+#define PORT 555
 
 #define TO_SERVER_FILE_NAME "to_server.txt"
 #define TO_CLIENT_FILE_NAME "to_client.txt"
@@ -173,8 +173,8 @@ int main(int argc, char* argv[])
 
 	SOCKADDR_IN sa;
 	sa.sin_family = AF_INET;
-	sa.sin_port = htons(PORT);
-	sa.sin_addr.S_un.S_addr = inet_addr(IP);
+	sa.sin_port = htons(argc == 3 ? atoi(argv[2]) : PORT);
+	sa.sin_addr.S_un.S_addr = inet_addr(argc == 3 ? argv[1] : IP);
 
 	#ifndef IS_SERVER
 
@@ -224,7 +224,7 @@ int main(int argc, char* argv[])
 //////////////////////////////////////////////////////////
 	char *data = to_server;
 	int size = to_server_size;
-	int part_size = 250000;
+	int part_size = 200000;
 	while (size)
 	{
 		int c = size < part_size? size : part_size;
