@@ -1,5 +1,6 @@
 GET_PARAMETER rtsp://172.20.44.45/archiveurlrtspctrl/302582043206133/ RTSP/1.0
 CSeq: 12345
-Session: rQUnGarf
+Session: ng0CWleq
+Content-Length: 8
 
 position

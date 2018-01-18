@@ -6,11 +6,6 @@
 #include <string>
 #include <error.h>
 //------------------------------------------------------------------------------
-//#define IS_SERVER
-
-#define IP "172.20.44.45"
-#define PORT 555
-
 #define TO_SERVER_FILE_NAME "to_server.txt"
 #define TO_CLIENT_FILE_NAME "to_client.txt"
 #define FROM_SERVER_FILE_NAME "from_server.txt"
@@ -158,6 +153,22 @@ bool receive_file(const char *file_name, SOCKET s)
 //------------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
+	if (argc == 1) {
+		printf(
+			"usage: exe ip port to from is_server\n"
+			"default values:\n"
+			"  ip - 127.0.0.1\n"
+			"  port - 80\n"
+			"  to - to_server.txt or to_client.txt\n"
+			"  from - from_server.txt or from_client.txt\n"
+			"  is_server - 0\n"
+			"examples:\n"
+			"  client - exe 172.20.44.45 555 to_server.txt from_server.txt\n"
+			"  server - exe 172.20.44.45 555 to_client.txt from_client.txt 1\n"
+		);
+		return 0;
+	}
+
 	if (!socket_subsys_init())
 	{
 		printf("socket_subsys_init error\n");
@@ -173,10 +184,10 @@ int main(int argc, char* argv[])
 
 	SOCKADDR_IN sa;
 	sa.sin_family = AF_INET;
-	sa.sin_port = htons(argc == 3 ? atoi(argv[2]) : PORT);
-	sa.sin_addr.S_un.S_addr = inet_addr(argc == 3 ? argv[1] : IP);
+	sa.sin_port = htons(argc >= 3 ? atoi(argv[2]) : 80);
+	sa.sin_addr.S_un.S_addr = inet_addr(argc >= 2 ? argv[1] : "127.0.0.1");
 
-	#ifndef IS_SERVER
+	if (argc < 6 || argv[5][0] == '0') { // client
 
 	if (!enable_nonblocking_mode(s, true))
 	{
@@ -216,9 +227,9 @@ int main(int argc, char* argv[])
 
 	char *to_server = 0;
 	int to_server_size = 0;
-	if (!read_file(TO_SERVER_FILE_NAME, &to_server, &to_server_size))
+	if (!read_file(argc >= 4 ? argv[3] : TO_SERVER_FILE_NAME, &to_server, &to_server_size))
 	{
-		printf("%s read_file error\n", TO_SERVER_FILE_NAME);
+		printf("%s read_file error\n", argc >= 4 ? argv[3] : TO_SERVER_FILE_NAME);
 		return -1;
 	}
 //////////////////////////////////////////////////////////
@@ -248,12 +259,12 @@ int main(int argc, char* argv[])
 //////////////////////////////////////////////////////////
 	delete [] to_server;
 
-	if (!receive_file(FROM_SERVER_FILE_NAME, s))
+	if (!receive_file(argc >= 5 ? argv[4] : FROM_SERVER_FILE_NAME, s))
 	{
 		return -1;
 	}
 
-	#else
+	} else { // server
 
 	if (bind(s, (SOCKADDR *)&sa, sizeof(sa)) == SOCKET_ERROR)
 	{
@@ -313,16 +324,16 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 
-	if (!receive_file(FROM_CLIENT_FILE_NAME, ns))
+	if (!receive_file(argc >= 5 ? argv[4] : FROM_CLIENT_FILE_NAME, ns))
 	{
 		return -1;
 	}
 
 	char *to_client = 0;
 	int to_client_size = 0;
-	if (!read_file(TO_CLIENT_FILE_NAME, &to_client, &to_client_size))
+	if (!read_file(argc >= 4 ? argv[3] : TO_CLIENT_FILE_NAME, &to_client, &to_client_size))
 	{
-		printf("%s read_file error\n", TO_CLIENT_FILE_NAME);
+		printf("%s read_file error\n", argc >= 4 ? argv[3] : TO_CLIENT_FILE_NAME);
 		return -1;
 	}
 
@@ -337,7 +348,7 @@ int main(int argc, char* argv[])
 	shutdown(ns, SD_BOTH);
 	closesocket(ns);
 
-	#endif
+	} // client - server
 
 	closesocket(s);
 

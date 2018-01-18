@@ -1,5 +1,0 @@
-RTSP/1.0 200 OK
-CSeq: 12345
-Range: clock=20171204T083324Z
-Session: Ce1hmUQl
-
